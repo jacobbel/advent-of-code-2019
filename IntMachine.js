@@ -1,4 +1,6 @@
-class IntMachine {
+const EventEmitter = require('events');
+
+class IntMachine extends EventEmitter {
 
     count;
     inputQueue;
@@ -9,6 +11,7 @@ class IntMachine {
     relativeBase;
 
     constructor(program) {
+        super()
         this.instructionPointer = 0;
         this.outputQueue = [];
         this.inputQueue = [];
@@ -135,6 +138,7 @@ class IntMachine {
                         // example 104
                         const p1 = this.getParameter(+instruction[0], this.readMemory(this.instructionPointer + 1))
                         this.outputQueue.push(p1);
+                        this.emit("output", p1);
                         this.instructionPointer += 2
                         break;
                     }
@@ -170,7 +174,7 @@ class IntMachine {
                         // example: 01007
                         const p1 = this.getParameter(+instruction[2], this.readMemory(this.instructionPointer + 1));
                         const p2 = this.getParameter(+instruction[1], this.readMemory(this.instructionPointer + 2));
-                        this.writeValue(+instruction[0], this.instructionPointer + 3,  +(p1 < p2));
+                        this.writeValue(+instruction[0], this.instructionPointer + 3, +(p1 < p2));
                         this.instructionPointer += 4;
                         break;
                     }
